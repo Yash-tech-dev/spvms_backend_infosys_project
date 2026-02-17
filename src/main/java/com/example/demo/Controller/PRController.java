@@ -65,6 +65,8 @@ import com.example.demo.models.PRItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.List; // Zaroori hai list return karne ke liye
 
 @RestController
@@ -113,4 +115,29 @@ public class PRController {
             @RequestParam String status) {
         return ResponseEntity.ok(prService.updatePRStatus(id, status));
     }
+
+    /**
+     * Method: updatePR
+     * Working: ID path variable se leta hai aur Updated data RequestBody se.
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updatePR(@PathVariable Long id, @RequestBody PurchaseRequest prDetails) {
+        try {
+            // prService ka update logic call karein
+            PurchaseRequest updatedPR = prService.updatePR(id, prDetails);
+            return ResponseEntity.ok(updatedPR);
+        } catch (Exception e) {
+            // Agar error aaye toh 400 status bhejta hai
+            return ResponseEntity.badRequest().body("Error updating PR: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<PurchaseRequest>> getMyPRs(Principal principal) {
+        // principal.getName() hume wahi username dega jo login ke waqt use hua tha [cite: 2026-02-02]
+        String loggedInUser = principal.getName();
+        return ResponseEntity.ok(prService.getPRsByUsername(loggedInUser));
+    }
+
+
 }

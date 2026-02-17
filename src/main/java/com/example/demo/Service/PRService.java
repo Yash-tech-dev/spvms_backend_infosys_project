@@ -173,4 +173,39 @@ public class PRService {
     }
 
 
+    /**
+     * Method: updatePR
+     * Working:
+     * 1. Database se purana PR dhundta hai.
+     * 2. Agar mil jata hai, toh uski description aur items update karta hai.
+     * 3. Frontend se aaye Total Cost ko database mein save karta hai.
+     */
+    public PurchaseRequest updatePR(Long id, PurchaseRequest updatedData) {
+        // 1. Pehle check karo ki PR exist karta hai ya nahi
+        return prRepository.findById(id).map(existingPR -> {
+
+            // 2. Basic fields update karo
+            existingPR.setDescription(updatedData.getDescription());
+            existingPR.setEstimatedTotalCost(updatedData.getEstimatedTotalCost());
+
+            // 3. Items update karo (PR aur PRItem ka relationship handle karna)
+            if (updatedData.getItems() != null && !updatedData.getItems().isEmpty()) {
+                // Purane items ko clear karke naye add karna sabse safe approach hai simple apps ke liye
+                existingPR.getItems().clear();
+
+                updatedData.getItems().forEach(item -> {
+                    item.setPurchaseRequest(existingPR); // Link back to PR
+                    existingPR.getItems().add(item);
+                });
+            }
+
+            // 4. Save and Return
+            return prRepository.save(existingPR);
+        }).orElseThrow(() -> new RuntimeException("PR not found with id " + id));
+    }
+
+    public List<PurchaseRequest> getPRsByUsername(String username) {
+        return prRepository.findByCreatedByUsername(username);
+    }
+
 }
