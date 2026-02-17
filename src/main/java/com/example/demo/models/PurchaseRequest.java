@@ -55,6 +55,9 @@ public class PurchaseRequest {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+
+    @Column(name = "created_by_username")
+    private String createdByUsername;
     /**
      * Method: calculateTotal (Requirement 5)
      * Working: Streams through all line items, calculates (Quantity * Price) for each,
@@ -66,52 +69,7 @@ public class PurchaseRequest {
                 .sum();
     }
 
-    // --- GETTERS AND SETTERS ---
 
-//    public VendorDocument getQuote() {
-//        return quote;
-//    }
-//
-//    public void setQuote(VendorDocument quote) {
-//        this.quote = quote;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public Double getEstimatedTotalCost() {
-//        return estimatedTotalCost;
-//    }
-//
-//    public void setEstimatedTotalCost(Double estimatedTotalCost) {
-//        this.estimatedTotalCost = estimatedTotalCost;
-//    }
-//
-//    // THIS METHOD FIXES YOUR ERROR
-//    public List<PRItem> getItems() {
-//        return items;
-//    }
-//
-//    public void setItems(List<PRItem> items) {
-//        this.items = items;
-//    }
-//
-//    public VendorDocument getLinkedQuote() {
-//        return quote;
-//    }
-//
-//    public void setLinkedQuote(VendorDocument linkedQuote) {
-//        this.quote = linkedQuote;
-//    }
 
     /** @return the unique database ID for the request */
     public Long getId() { return id; }
@@ -151,4 +109,7 @@ public class PurchaseRequest {
     public void setVendor(User vendor) {
         this.vendor = vendor;
     }
+
+    public String getCreatedByUsername() { return createdByUsername; }
+    public void setCreatedByUsername(String createdByUsername) { this.createdByUsername = createdByUsername; }
 }
