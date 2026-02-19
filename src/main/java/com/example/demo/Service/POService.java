@@ -252,4 +252,8 @@ public class POService {
         out.writeBytes(csvContent.toString().getBytes());
         return out.toByteArray();
     }
+
+    public List<PurchaseOrder> getPOsByUsername(String username) {
+        return poRepository.findByCreatedByUsername(username);
+    }
 }
