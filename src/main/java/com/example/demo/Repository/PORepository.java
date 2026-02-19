@@ -93,4 +93,6 @@ public interface PORepository extends JpaRepository<PurchaseOrder, Long> {
     @Query("SELECT COUNT(p) FROM PurchaseOrder p WHERE p.status NOT IN :excludedStatuses")
     long countByStatusNotIn(@Param("excludedStatuses") List<POStatus> excludedStatuses);
 
+    List<PurchaseOrder> findByCreatedByUsername(String username);
+
 }

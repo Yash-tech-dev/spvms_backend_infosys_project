@@ -5,6 +5,7 @@ import com.example.demo.models.DeliveryRecord;
 import com.example.demo.models.POStatus;
 import com.example.demo.models.PurchaseOrder;
 import com.example.demo.Repository.PORepository;
+import com.example.demo.models.PurchaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -106,4 +107,16 @@ public class POController {
             return ResponseEntity.ok("Status Updated Successfully");
         }).orElse(ResponseEntity.notFound().build());
     }
+
+
+    @GetMapping("/my")
+    public ResponseEntity<List<PurchaseOrder>> getMyPOs(Principal principal) {
+        /** * Method Explanation:
+         * 1. Principal: Security context se logged-in user ka username uthata hai. [cite: 2026-01-30]
+         * 2. Security: No one can see others' POs by changing URL parameters. [cite: 2026-02-02]
+         */
+        String username = principal.getName();
+        return ResponseEntity.ok(poService.getPOsByUsername(username));
+    }
+
 }
